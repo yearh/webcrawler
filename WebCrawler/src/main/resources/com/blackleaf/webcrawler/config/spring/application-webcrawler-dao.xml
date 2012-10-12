@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="linkDao" class="com.blackleaf.webcrawler.dao.impl.LinkDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<bean id="pageDao" class="com.blackleaf.webcrawler.dao.impl.PageDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+</beans>

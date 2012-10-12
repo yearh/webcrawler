@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- Service -->
+	<bean id="crawlService" class="com.blackleaf.webcrawler.service.impl.CrawlServiceImpl">
+		<property name="preProcessor" ref="preProcessor" />
+		<property name="bizProcessor" ref="bizProcessor" />
+		<property name="postProcessor" ref="postProcessor" />
+		<property name="rollbackProcessor" ref="rollbackProcessor" />
+	</bean>
+	<bean id="linkService" class="com.blackleaf.webcrawler.service.impl.LinkServiceImpl">
+		<property name="linkDao" ref="linkDao" />
+	</bean>
+	<bean id="pageService" class="com.blackleaf.webcrawler.service.impl.PageServiceImpl">
+		<property name="pageDao" ref="pageDao" />
+	</bean>
+	
+	<!-- Processor collection -->
+	<bean id="preProcessor" class="com.blackleaf.webcrawler.processor.ExceptionalProcessor">
+		<property name="processors">
+			<list>
+				<value>lockLinkProcessor</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="bizProcessor" class="com.blackleaf.webcrawler.processor.ExceptionalProcessor">
+		<property name="processors">
+			<list>
+				<value>retrievePageProcessor</value>
+				<value>pageProcessor</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="postProcessor" class="com.blackleaf.webcrawler.processor.ExceptionalProcessor">
+		<property name="processors">
+			<list>
+				<value>unlockLinkProcessor</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="rollbackProcessor" class="com.blackleaf.webcrawler.processor.NoneExceptionProcessor">
+		<property name="processors">
+			<list>
+				<value>unlockLinkProcessor</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Processor -->
+	<bean id="lockLinkProcessor" class="com.blackleaf.webcrawler.processor.impl.LockLinkProcessor">
+		<property name="linkService" ref="linkService"/>
+	</bean>
+	<bean id="retrievePageProcessor" class="com.blackleaf.webcrawler.processor.impl.RetrievePageProcessor">
+		<property name="linkService" ref="linkService"/>
+	</bean>
+	<bean id="pageProcessor" class="com.blackleaf.webcrawler.processor.impl.PageProcessor">
+		<property name="pageService" ref="pageService"/>
+	</bean>
+</beans>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMapConfig>
+	<settings cacheModelsEnabled="false" enhancementEnabled="true"
+		lazyLoadingEnabled="true" maxRequests="64" maxSessions="32"
+		maxTransactions="16" useStatementNamespaces="false" />
+	<sqlMap resource="com/blackleaf/webcrawler/config/sqlmap/link.xml" />
+	<sqlMap resource="com/blackleaf/webcrawler/config/sqlmap/page.xml" />
+</sqlMapConfig>
