@@ -8,7 +8,7 @@ public class PageServiceImpl implements PageService {
 
 	private PageDao pageDao;
 
-	public int insertPage(Page page) {
+	public long insertPage(Page page) {
 		return pageDao.insertPage(page);
 	}
 

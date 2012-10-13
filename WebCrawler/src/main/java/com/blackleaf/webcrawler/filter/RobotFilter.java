@@ -9,7 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RobotFilter extends BaseLinkFilter {
+import com.blackleaf.webcrawler.interfaces.LinkFilter;
+
+public class RobotFilter implements LinkFilter {
 	private Map<String, List<String>> robotMap;
 
 	public RobotFilter() {
@@ -50,7 +52,6 @@ public class RobotFilter extends BaseLinkFilter {
 		}
 	}
 
-	@Override
 	public boolean doFilter(String link) {
 		List<String> robotLink;
 		try {
@@ -62,18 +63,13 @@ public class RobotFilter extends BaseLinkFilter {
 				}
 			}
 
-			return getNextFilter().doFilter(link);
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("invalid link: " + link);
 			return false;
 		}
 
-	}
-
-	@Override
-	public String getFilterName() {
-		return ROBOT_FILTER;
 	}
 
 }

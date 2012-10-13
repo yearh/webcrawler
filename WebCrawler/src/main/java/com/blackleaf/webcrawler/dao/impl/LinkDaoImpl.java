@@ -20,7 +20,7 @@ public class LinkDaoImpl extends SqlMapClientDaoSupport implements LinkDao {
 	}
 
 	public Link getCrawlableLink() {
-		return (Link) getSqlMapClientTemplate().insert("getCrawlableLink");
+		return (Link) getSqlMapClientTemplate().queryForObject("getCrawlableLink");
 	}
 
 	public int lockLink(long linkId) {
@@ -33,6 +33,14 @@ public class LinkDaoImpl extends SqlMapClientDaoSupport implements LinkDao {
 		param.put("preFlag", preFlag);
 		param.put("currFlag", currFlag);
 		return getSqlMapClientTemplate().update("updateLockFlag", param);
+	}
+
+	public int updateLink(Link link) {
+		return getSqlMapClientTemplate().update("updateLink", link);
+	}
+
+	public Link getLinkByUrl(String url) {
+		return (Link) getSqlMapClientTemplate().queryForObject("getLinkByUrl", url);
 	}
 
 }

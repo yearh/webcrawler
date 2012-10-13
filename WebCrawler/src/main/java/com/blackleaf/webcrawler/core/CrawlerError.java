@@ -6,6 +6,7 @@ public class CrawlerError {
 	public final static String ERR_RETRIEVE_PAGE = "ERR_RETRIEVE_PAGE";
 	public final static String ERR_RETRIEVE_LINK = "ERR_RETRIEVE_LINK";
 	public final static String ERR_LOCK_LINK = "ERR_LOCK_LINK";
+	public final static String ERR_GET_AVAIL_LINK = "ERR_GET_AVAIL_LINK";
 	
 	private String errorCode;
 	private String message;

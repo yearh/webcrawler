@@ -11,4 +11,8 @@ public interface LinkDao {
 	public Link getCrawlableLink();
 
 	public int updateLockFlag(long linkId, int preFlag, int currFlag);
+
+	public int updateLink(Link link);
+	
+	public Link getLinkByUrl(String url);
 }

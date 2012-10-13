@@ -19,7 +19,7 @@ public class WebCrawler {
 		List<String> links = new ArrayList<String>();
 		links.add("webservices.seekda.com");
 		LinkFilter filter = new LinkValidFilter();
-		filter.setNextFilter(new HostFilter(links));
+//		filter.setNextFilter(new HostFilter(links));
 		return filter;
 	}
 
@@ -43,10 +43,10 @@ public class WebCrawler {
 	public static void main(String[] args) {
 		try {
 
-			// 1.´ÓÎÄ¼þÖÐ»ñÈ¡¸ùÂ·¾¶
+			// 1.ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð»ï¿½È¡ï¿½ï¿½Â·ï¿½ï¿½
 			ArrayList<String> rootLinks = getRootLinks();
 
-			// 2.ÖðÒ»ÅÀ¸úÂ·¾¶
+			// 2.ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
 			for (int i = 0; i < rootLinks.size(); i++) {
 				new Crawler(rootLinks.get(i), buildLinkFilter());
 			}

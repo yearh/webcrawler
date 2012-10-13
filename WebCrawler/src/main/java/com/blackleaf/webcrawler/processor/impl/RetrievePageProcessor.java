@@ -28,7 +28,6 @@ public class RetrievePageProcessor implements InvocationProcessor<CrawlerContext
 		Link link = context.getCurrLink();
 
 		try {
-			// 爬当前页面内容存在context中，以便后面的processor用，不需要重新爬取
 			Page page = new Page();
 			page.setContent(retrieveContents(link.getUrl()));
 			page.setUrl(link.getUrl());

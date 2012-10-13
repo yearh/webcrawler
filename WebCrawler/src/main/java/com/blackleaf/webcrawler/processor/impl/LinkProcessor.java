@@ -12,12 +12,14 @@ import com.blackleaf.webcrawler.core.CrawlerError;
 import com.blackleaf.webcrawler.core.Link;
 import com.blackleaf.webcrawler.domain.LinkRelation;
 import com.blackleaf.webcrawler.domain.Page;
+import com.blackleaf.webcrawler.interfaces.LinkFilter;
 import com.blackleaf.webcrawler.processor.InvocationProcessor;
 import com.blackleaf.webcrawler.service.LinkService;
 
 public class LinkProcessor implements InvocationProcessor<CrawlerContext> {
 
 	private LinkService linkService;
+	private List<LinkFilter> linkFilterList;
 
 	public boolean invoke(CrawlerContext context) {
 		boolean result = false;
@@ -25,7 +27,13 @@ public class LinkProcessor implements InvocationProcessor<CrawlerContext> {
 		Link currLink = context.getCurrLink();
 		if (currPage.getType() == Page.PAGE_TYPE_NORMAL) {
 			try {
+				// 获取页面中存在的链接
 				List<Link> linkList = retrieveLinks(currPage.getUrl(), currPage.getContent());
+
+				// 过滤非法或不需要的链接
+				linkList = filterLink(linkList);
+
+				// 更新父链接并保存，插入子链接
 				currLink.setPageId(currPage.getId());
 				currLink.setStatus(Link.LINK_STATUS_CRAWLED);
 				saveLinks(currLink, linkList);
@@ -39,8 +47,26 @@ public class LinkProcessor implements InvocationProcessor<CrawlerContext> {
 		return result;
 	}
 
+	private List<Link> filterLink(List<Link> linkList) {
+		List<Link> resultList = new ArrayList<Link>();
+		for (Link link : linkList) {
+			boolean shouldBeRemoved = false;
+			for (LinkFilter filter : linkFilterList) {
+				if (!filter.doFilter(link.getUrl())) {
+					shouldBeRemoved = true;
+					break;
+				}
+			}
+
+			if (!shouldBeRemoved)
+				resultList.add(link);
+		}
+
+		return resultList;
+	}
+
 	private void saveLinks(Link parentLink, List<Link> childLinks) {
-		linkService.insertLink(parentLink);
+		linkService.updateLink(parentLink);
 		for (Link childLink : childLinks) {
 			childLink.setStatus(Link.LINK_STATUS_INIT);
 			linkService.insertLink(childLink);
@@ -166,4 +192,11 @@ public class LinkProcessor implements InvocationProcessor<CrawlerContext> {
 		this.linkService = linkService;
 	}
 
+	public List<LinkFilter> getLinkFilterList() {
+		return linkFilterList;
+	}
+
+	public void setLinkFilterList(List<LinkFilter> linkFilterList) {
+		this.linkFilterList = linkFilterList;
+	}
 }

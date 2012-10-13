@@ -17,7 +17,13 @@
 	<select id="getCrawlableLink" resultClass="Link">
 		select * from link where lock_flag=0 and status=0 limit 1
 	</select>
+	<select id="getLinkByUrl" parameterClass="string" resultClass="Link">
+		select * from link where url=#value#
+	</select>
 	<update id="updateLockFlag" parameterClass="java.util.Map">
 		update link set lock_flag=#currFlag# where id=#linkId# and lock_flag=#preFlag#
+	</update>
+	<update id="updateLink" parameterClass="Link">
+		update link set page_id=#pageId#,status=#status#,update_time=sysdate() where id=#id#
 	</update>
 </sqlMap>

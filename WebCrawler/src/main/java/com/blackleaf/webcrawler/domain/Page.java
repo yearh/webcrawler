@@ -6,17 +6,17 @@ public class Page {
 	public final static int PAGE_TYPE_NORMAL = 0;
 	public final static int PAGE_TYPE_WSDL = 1;
 
-	private int id;
+	private long id;
 	private int type;
 	private String url;
 	private String content;
 	private Date createTime;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

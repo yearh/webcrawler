@@ -6,7 +6,7 @@ import com.blackleaf.webcrawler.dao.PageDao;
 import com.blackleaf.webcrawler.domain.Page;
 
 public class PageDaoImpl extends SqlMapClientDaoSupport implements PageDao {
-	public int insertPage(Page page) {
-		return (Integer) getSqlMapClientTemplate().insert("insertPage");
+	public long insertPage(Page page) {
+		return (Long) getSqlMapClientTemplate().insert("insertPage", page);
 	}
 }

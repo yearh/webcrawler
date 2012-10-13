@@ -9,6 +9,8 @@ public interface LinkService {
 	public Link getCrawlableLink();
 
 	public void insertLink(Link link);
+	
+	public int updateLink(Link link);
 
 	public void insertLinkRelation(LinkRelation relation);
 
