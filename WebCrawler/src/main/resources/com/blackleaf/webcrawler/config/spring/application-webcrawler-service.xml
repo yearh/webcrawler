@@ -38,6 +38,7 @@
 	<bean id="postProcessor" class="com.blackleaf.webcrawler.processor.NoneExceptionProcessor">
 		<property name="processors">
 			<list>
+				<ref bean="handleErrorLinkProcessor"/>
 				<ref bean="unlockLinkProcessor"/>
 			</list>
 		</property>
@@ -54,6 +55,7 @@
 	<!-- Processor -->
 	<bean id="getAvailLinkProcessor" class="com.blackleaf.webcrawler.processor.impl.GetAvailLinkProcessor">
 		<property name="linkService" ref="linkService"/>
+		<property name="crawlSize" value="${link_size_per_thread}"/>
 	</bean>
 	<bean id="lockLinkProcessor" class="com.blackleaf.webcrawler.processor.impl.LockLinkProcessor">
 		<property name="linkService" ref="linkService"/>
@@ -76,6 +78,12 @@
 			</list>
 		</property>
 	</bean>
+	<bean id="handleErrorLinkProcessor" class="com.blackleaf.webcrawler.processor.impl.HandleErrorLinkProcessor">
+		<property name="linkService" ref="linkService"/>
+	</bean>
+	
+	
+	<!-- LinkFilter -->
 	<bean id="hostFilter" class="com.blackleaf.webcrawler.filter.HostFilter">
 		<property name="allowedHost">
 			<list>

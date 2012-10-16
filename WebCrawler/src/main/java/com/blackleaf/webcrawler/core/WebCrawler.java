@@ -43,10 +43,8 @@ public class WebCrawler {
 	public static void main(String[] args) {
 		try {
 
-			// 1.���ļ��л�ȡ��·��
 			ArrayList<String> rootLinks = getRootLinks();
 
-			// 2.��һ����·��
 			for (int i = 0; i < rootLinks.size(); i++) {
 				new Crawler(rootLinks.get(i), buildLinkFilter());
 			}

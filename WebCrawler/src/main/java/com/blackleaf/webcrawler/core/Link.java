@@ -7,6 +7,7 @@ public class Link {
 	public final static int LINK_UNLOCK = 0;
 	public final static int LINK_STATUS_INIT = 0;
 	public final static int LINK_STATUS_CRAWLED = 1;
+	public final static int LINK_STATUS_ERROR = 2;
 
 	private long id;
 	private long pageId = -1;
@@ -70,6 +71,10 @@ public class Link {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public String toString() {
+		return getUrl();
 	}
 
 }

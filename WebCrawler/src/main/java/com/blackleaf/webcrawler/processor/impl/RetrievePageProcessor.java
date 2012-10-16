@@ -4,13 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.blackleaf.webcrawler.core.CrawlerContext;
-import com.blackleaf.webcrawler.core.CrawlerError;
 import com.blackleaf.webcrawler.core.Link;
 import com.blackleaf.webcrawler.domain.Page;
 import com.blackleaf.webcrawler.processor.InvocationProcessor;
 import com.blackleaf.webcrawler.service.LinkService;
+import com.blackleaf.webcrawler.vo.PageBean;
 
 public class RetrievePageProcessor implements InvocationProcessor<CrawlerContext> {
 	private LinkService linkService;
@@ -24,23 +26,24 @@ public class RetrievePageProcessor implements InvocationProcessor<CrawlerContext
 	}
 
 	public boolean invoke(CrawlerContext context) {
-		boolean result = false;
-		Link link = context.getCurrLink();
+		Link currLink = null;
+		List<PageBean> pageBeanList = context.getPageBeanList();
 
-		try {
+		// 逐个爬取链接内容，记录爬取错误的链接
+		for (PageBean pageBean : pageBeanList) {
+			currLink = pageBean.getPageLink();
 			Page page = new Page();
-			page.setContent(retrieveContents(link.getUrl()));
-			page.setUrl(link.getUrl());
-			context.setCurrPage(page);
-
-			result = true;
-		} catch (IOException e) {
-			e.printStackTrace();
-			context.setError(new CrawlerError(CrawlerError.ERR_RETRIEVE_PAGE, "retrieve page error, linkId=" + link.getId() + "url=" + link.getUrl()));
-			result = false;
+			try {
+				page.setContent(retrieveContents(currLink.getUrl()));
+				page.setUrl(currLink.getUrl());
+				pageBean.setPage(page);
+			} catch (IOException e) {
+				context.getErrorLinks().add(currLink);
+				pageBean.getPageLink().setStatus(Link.LINK_STATUS_ERROR);
+			}
 		}
 
-		return result;
+		return true;
 	}
 
 	private String retrieveContents(String url) throws IOException {

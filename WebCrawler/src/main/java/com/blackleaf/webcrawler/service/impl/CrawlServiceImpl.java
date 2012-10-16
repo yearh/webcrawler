@@ -49,7 +49,9 @@ public class CrawlServiceImpl implements CrawlService {
 			preProcessor.invoke(context);
 			bizProcessor.invoke(context);
 			postProcessor.invoke(context);
+
 		} catch (Exception e) {
+			System.out.println(context.getError().getMessage());
 			e.printStackTrace();
 			rollbackProcessor.invoke(context);
 		}

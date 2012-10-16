@@ -7,4 +7,13 @@
 			SELECT LAST_INSERT_ID();
 		</selectKey>
 	</insert>
+	<insert id="insertPages" parameterClass="java.util.List">
+		insert into page (type, url, content) values
+		<iterate conjunction=",">
+			(#values[].type#, #values[].url#, #values[].content#)
+        </iterate>
+		<selectKey resultClass="long" keyProperty="id">
+			SELECT LAST_INSERT_ID();
+		</selectKey>
+	</insert>
 </sqlMap>

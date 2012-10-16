@@ -15,6 +15,7 @@ import com.blackleaf.webcrawler.domain.Page;
 import com.blackleaf.webcrawler.interfaces.LinkFilter;
 import com.blackleaf.webcrawler.processor.InvocationProcessor;
 import com.blackleaf.webcrawler.service.LinkService;
+import com.blackleaf.webcrawler.vo.PageBean;
 
 public class LinkProcessor implements InvocationProcessor<CrawlerContext> {
 
@@ -22,10 +23,14 @@ public class LinkProcessor implements InvocationProcessor<CrawlerContext> {
 	private List<LinkFilter> linkFilterList;
 
 	public boolean invoke(CrawlerContext context) {
-		boolean result = false;
-		Page currPage = context.getCurrPage();
-		Link currLink = context.getCurrLink();
-		if (currPage.getType() == Page.PAGE_TYPE_NORMAL) {
+		boolean result = true;
+		List<PageBean> pageBeanList = context.getPageBeanList();
+		for (PageBean pageBean : pageBeanList) {
+			if (pageBean.getPageLink().getStatus() != Link.LINK_STATUS_INIT)
+				continue;
+			Page currPage = pageBean.getPage();
+			Link currLink = pageBean.getPageLink();
+
 			try {
 				// 获取页面中存在的链接
 				List<Link> linkList = retrieveLinks(currPage.getUrl(), currPage.getContent());
@@ -33,17 +38,19 @@ public class LinkProcessor implements InvocationProcessor<CrawlerContext> {
 				// 过滤非法或不需要的链接
 				linkList = filterLink(linkList);
 
-				// 更新父链接并保存，插入子链接
 				currLink.setPageId(currPage.getId());
 				currLink.setStatus(Link.LINK_STATUS_CRAWLED);
-				saveLinks(currLink, linkList);
-				result = true;
+				pageBean.setChildLink(linkList);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				context.setError(new CrawlerError(CrawlerError.ERR_RETRIEVE_LINK, "retrieve link error, page url=" + currPage.getUrl()));
 				result = false;
 			}
 		}
+
+		saveLinks(pageBeanList);
+
 		return result;
 	}
 
@@ -65,13 +72,20 @@ public class LinkProcessor implements InvocationProcessor<CrawlerContext> {
 		return resultList;
 	}
 
-	private void saveLinks(Link parentLink, List<Link> childLinks) {
-		linkService.updateLink(parentLink);
-		for (Link childLink : childLinks) {
-			childLink.setStatus(Link.LINK_STATUS_INIT);
-			linkService.insertLink(childLink);
-			linkService.insertLinkRelation(new LinkRelation(parentLink.getId(), childLink.getId()));
+	private void saveLinks(List<PageBean> pageBeanList) {
+		List<Link> parentLinks = new ArrayList<Link>();
+		List<Link> childLinks = new ArrayList<Link>();
+		List<LinkRelation> linkRelations = new ArrayList<LinkRelation>();
+		for (PageBean pageBean : pageBeanList) {
+			parentLinks.add(pageBean.getPageLink());
+			childLinks.addAll(pageBean.getChildLink());
+			for (Link childLink : pageBean.getChildLink())
+				linkRelations.add(new LinkRelation(pageBean.getPageLink().getId(), childLink.getId()));
 		}
+
+		linkService.updateLinks(parentLinks);
+		linkService.insertLinks(childLinks);
+		linkService.insertLinkRelations(linkRelations);
 	}
 
 	private List<Link> retrieveLinks(String url, String pageContent) throws MalformedURLException {

@@ -1,19 +1,28 @@
 package com.blackleaf.webcrawler.core;
 
-import com.blackleaf.webcrawler.domain.Page;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.blackleaf.webcrawler.vo.PageBean;
 
 public class CrawlerContext {
-	private Page currPage;
-	private Link currLink;
 	private CrawlerError error;
+	private List<PageBean> pageBeanList = new ArrayList<PageBean>();
+	private List<Link> errorLinks = new ArrayList<Link>();
 	private boolean linkLockFlag = false;
 
-	public Page getCurrPage() {
-		return currPage;
+	public CrawlerContext() {
+		super();
 	}
 
-	public void setCurrPage(Page currPage) {
-		this.currPage = currPage;
+	public CrawlerContext(List<Link> crawlLink) {
+		for (Link link : crawlLink)
+			pageBeanList.add(new PageBean(link));
+	}
+
+	public void addCrawlLinks(List<Link> linkList) {
+		for (Link link : linkList)
+			pageBeanList.add(new PageBean(link));
 	}
 
 	public CrawlerError getError() {
@@ -24,14 +33,6 @@ public class CrawlerContext {
 		this.error = error;
 	}
 
-	public Link getCurrLink() {
-		return currLink;
-	}
-
-	public void setCurrLink(Link currLink) {
-		this.currLink = currLink;
-	}
-
 	public boolean isLinkLockFlag() {
 		return linkLockFlag;
 	}
@@ -39,4 +40,13 @@ public class CrawlerContext {
 	public void setLinkLockFlag(boolean linkLockFlag) {
 		this.linkLockFlag = linkLockFlag;
 	}
+
+	public List<PageBean> getPageBeanList() {
+		return pageBeanList;
+	}
+
+	public List<Link> getErrorLinks() {
+		return errorLinks;
+	}
+
 }

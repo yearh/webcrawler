@@ -2,8 +2,19 @@
 <sqlMap namespace="WEBCRAWLER_LINK">
 	<typeAlias alias="Link" type="com.blackleaf.webcrawler.core.Link" />
 	<typeAlias alias="LinkRelation" type="com.blackleaf.webcrawler.domain.LinkRelation" />
+	
+	<!-- insert -->
 	<insert id="insertLink" parameterClass="Link">
 		insert into link (page_id, url, lock_flag, status) values (#id#, #url#, #lockFlag#, #status#)
+		<selectKey resultClass="long" keyProperty="id">
+			SELECT LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+	<insert id="insertLinks" parameterClass="java.util.List">
+		insert into link (page_id, url, lock_flag, status) values 
+		<iterate conjunction=",">
+			(#values[].id#, #values[].url#, #values[].lockFlag#, #values[].status#)
+        </iterate>
 		<selectKey resultClass="long" keyProperty="id">
 			SELECT LAST_INSERT_ID();
 		</selectKey>
@@ -14,14 +25,30 @@
 			SELECT LAST_INSERT_ID();
 		</selectKey>
 	</insert>
-	<select id="getCrawlableLink" resultClass="Link">
-		select * from link where lock_flag=0 and status=0 limit 1
+	<insert id="insertLinkRelations" parameterClass="java.util.List">
+		insert into link_relation (from_link_id, to_link_id) values 
+		<iterate conjunction=",">
+			(#values[].fromLinkId#, #values[].toLinkId#)
+        </iterate>
+	</insert>
+	
+	<!-- select -->
+	<select id="getCrawlableLink" parameterClass="int" resultClass="Link">
+		select * from link where lock_flag=0 and status=0 limit ${value}$
 	</select>
 	<select id="getLinkByUrl" parameterClass="string" resultClass="Link">
 		select * from link where url=#value#
 	</select>
+	
+	<!-- update -->
 	<update id="updateLockFlag" parameterClass="java.util.Map">
 		update link set lock_flag=#currFlag# where id=#linkId# and lock_flag=#preFlag#
+	</update>
+	<update id="updateLockFlags" parameterClass="java.util.Map">
+		update link set lock_flag=#currFlag# where lock_flag=#preFlag# and id in
+		<iterate property="linkIds" open="(" close=")" conjunction=",">  
+			#linkIds[]#  
+    	</iterate> 
 	</update>
 	<update id="updateLink" parameterClass="Link">
 		update link set page_id=#pageId#,status=#status#,update_time=sysdate() where id=#id#

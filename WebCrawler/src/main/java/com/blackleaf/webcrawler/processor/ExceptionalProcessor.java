@@ -12,16 +12,16 @@ public class ExceptionalProcessor extends InvocationCollection<CrawlerContext> {
 		for (InvocationProcessor<CrawlerContext> proc : getProcessors()) {
 			try {
 				result = proc.invoke(context);
-				if (result == false) {
-					if (context.getError() == null) {
-						context.setError(new CrawlerError(CrawlerError.ERR_PROCESSOR_FALSE_UNKNOWN, "processor return false, processor = " + proc.toString()));
-					}
-					throw new CrawlerException("ExceptionalProcessor return false, processor = " + proc);
-				}
 			} catch (Exception e) {
-				result = false;
 				context.setError(new CrawlerError(CrawlerError.ERR_PROCESSOR_UNKNOWN, "processor error, processor = " + proc));
 				throw new CrawlerException("ExceptionalProcessor error, processor = " + proc, e);
+			}
+
+			if (result == false) {
+				if (context.getError() == null) {
+					context.setError(new CrawlerError(CrawlerError.ERR_PROCESSOR_FALSE_UNKNOWN, "processor return false, processor = " + proc.toString()));
+				}
+				throw new CrawlerException("ExceptionalProcessor return false, processor = " + proc);
 			}
 		}
 

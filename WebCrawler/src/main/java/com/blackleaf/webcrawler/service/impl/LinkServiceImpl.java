@@ -1,5 +1,7 @@
 package com.blackleaf.webcrawler.service.impl;
 
+import java.util.List;
+
 import org.springframework.dao.DataIntegrityViolationException;
 
 import com.blackleaf.webcrawler.core.CrawlerException;
@@ -12,8 +14,8 @@ public class LinkServiceImpl implements LinkService {
 
 	private LinkDao linkDao;
 
-	public Link getCrawlableLink() {
-		return linkDao.getCrawlableLink();
+	public List<Link> getCrawlableLink(int size) {
+		return linkDao.getCrawlableLink(size);
 	}
 
 	/*
@@ -42,10 +44,26 @@ public class LinkServiceImpl implements LinkService {
 			throw new CrawlerException("lock link failed, link_id=" + linkId);
 	}
 
+	public void lockLinks(List<Long> linkIds) throws CrawlerException {
+		int result = linkDao.updateLockFlags(linkIds, Link.LINK_UNLOCK, Link.LINK_LOCKED);
+		if (result == 0)
+			throw new CrawlerException("lock links failed, link size=" + linkIds.size() + ", link ids=(" + linkIds.get(0).longValue() + "..."
+					+ linkIds.get(linkIds.size() - 1).longValue() + ")");
+	}
+
 	public void unlockLink(long linkId) throws CrawlerException {
 		int result = linkDao.updateLockFlag(linkId, Link.LINK_LOCKED, Link.LINK_UNLOCK);
 		if (result == 0)
 			throw new CrawlerException("unlock link failed, link_id=" + linkId);
+	}
+
+	public void unlockLinks(List<Long> linkIds) throws CrawlerException {
+		if (linkIds.size() == 0)
+			return;
+		int result = linkDao.updateLockFlags(linkIds, Link.LINK_LOCKED, Link.LINK_UNLOCK);
+		if (result == 0)
+			throw new CrawlerException("unlock links failed, link size=" + linkIds.size() + ", link ids=(" + linkIds.get(0).longValue() + "..."
+					+ linkIds.get(linkIds.size() - 1).longValue() + ")");
 	}
 
 	public int updateLink(Link link) {
@@ -59,4 +77,29 @@ public class LinkServiceImpl implements LinkService {
 	public void setLinkDao(LinkDao linkDao) {
 		this.linkDao = linkDao;
 	}
+
+	public void insertLinks(List<Link> links) {
+		for (Link link : links) {
+			try {
+				linkDao.insertLink(link);
+			} catch (DataIntegrityViolationException e) {
+				Link existLink = linkDao.getLinkByUrl(link.getUrl());
+				if (existLink != null)
+					link.setId(existLink.getId());
+			}
+		}
+	}
+
+	public int updateLinks(List<Link> links) {
+		int result = 0;
+		for (Link link : links)
+			result += linkDao.updateLink(link);
+		return result;
+	}
+
+	public void insertLinkRelations(List<LinkRelation> relations) {
+		if (relations.size() != 0)
+			linkDao.insertLinkRelations(relations);
+	}
+
 }
