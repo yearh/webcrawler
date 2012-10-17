@@ -42,14 +42,14 @@ public class LinkProcessor implements InvocationProcessor<CrawlerContext> {
 				currLink.setStatus(Link.LINK_STATUS_CRAWLED);
 				pageBean.setChildLink(linkList);
 
+				saveLinksByPageBean(pageBean);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				context.setError(new CrawlerError(CrawlerError.ERR_RETRIEVE_LINK, "retrieve link error, page url=" + currPage.getUrl()));
 				result = false;
 			}
 		}
-
-		saveLinks(pageBeanList);
 
 		return result;
 	}
@@ -72,19 +72,21 @@ public class LinkProcessor implements InvocationProcessor<CrawlerContext> {
 		return resultList;
 	}
 
-	private void saveLinks(List<PageBean> pageBeanList) {
-		List<Link> parentLinks = new ArrayList<Link>();
-		List<Link> childLinks = new ArrayList<Link>();
-		List<LinkRelation> linkRelations = new ArrayList<LinkRelation>();
-		for (PageBean pageBean : pageBeanList) {
-			parentLinks.add(pageBean.getPageLink());
-			childLinks.addAll(pageBean.getChildLink());
-			for (Link childLink : pageBean.getChildLink())
-				linkRelations.add(new LinkRelation(pageBean.getPageLink().getId(), childLink.getId()));
-		}
+	private void saveLinksByPageBean(PageBean pageBean) {
+		// 更新父链接
+		Link parentLink = pageBean.getPageLink();
+		linkService.updateLink(parentLink);
 
-		linkService.updateLinks(parentLinks);
+		// 插入子链接
+		List<Link> childLinks = pageBean.getChildLink();
 		linkService.insertLinks(childLinks);
+
+		// 插入链接关系
+		List<LinkRelation> linkRelations = new ArrayList<LinkRelation>();
+		for (Link childLink : childLinks) {
+			LinkRelation relation = new LinkRelation(parentLink.getId(), childLink.getId());
+			linkRelations.add(relation);
+		}
 		linkService.insertLinkRelations(linkRelations);
 	}
 
