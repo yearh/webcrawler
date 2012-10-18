@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.blackleaf.webcrawler.interfaces.LinkFilter;
 
 public class RobotFilter implements LinkFilter {
 	private Map<String, List<String>> robotMap;

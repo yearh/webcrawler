@@ -12,7 +12,7 @@ import com.blackleaf.webcrawler.core.CrawlerError;
 import com.blackleaf.webcrawler.core.Link;
 import com.blackleaf.webcrawler.domain.LinkRelation;
 import com.blackleaf.webcrawler.domain.Page;
-import com.blackleaf.webcrawler.interfaces.LinkFilter;
+import com.blackleaf.webcrawler.filter.LinkFilter;
 import com.blackleaf.webcrawler.processor.InvocationProcessor;
 import com.blackleaf.webcrawler.service.LinkService;
 import com.blackleaf.webcrawler.vo.PageBean;

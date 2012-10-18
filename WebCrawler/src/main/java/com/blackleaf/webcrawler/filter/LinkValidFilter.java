@@ -2,7 +2,6 @@ package com.blackleaf.webcrawler.filter;
 
 import java.net.URL;
 
-import com.blackleaf.webcrawler.interfaces.LinkFilter;
 
 public class LinkValidFilter implements LinkFilter {
 

@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
-import com.blackleaf.webcrawler.interfaces.LinkFilter;
 
 public class HostFilter implements LinkFilter {
 	private List<String> allowedHost;
