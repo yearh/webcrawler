@@ -3,6 +3,7 @@ package com.blackleaf.webcrawler.service.impl;
 import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.UncategorizedSQLException;
 
 import com.blackleaf.webcrawler.core.CrawlerException;
 import com.blackleaf.webcrawler.core.Link;
@@ -86,6 +87,8 @@ public class LinkServiceImpl implements LinkService {
 				Link existLink = linkDao.getLinkByUrl(link.getUrl());
 				if (existLink != null)
 					link.setId(existLink.getId());
+			} catch (UncategorizedSQLException se) {
+				se.printStackTrace();
 			}
 		}
 	}

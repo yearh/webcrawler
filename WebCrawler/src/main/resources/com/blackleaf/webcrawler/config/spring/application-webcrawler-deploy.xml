@@ -5,4 +5,5 @@
 	<import resource="classpath:com/blackleaf/webcrawler/config/spring/application-webcrawler-dao.xml" />
 	<import resource="classpath:com/blackleaf/webcrawler/config/spring/application-webcrawler-service.xml" />
 	<import resource="classpath:com/blackleaf/webcrawler/config/spring/application-webcrawler-transaction.xml" />
+	<import resource="classpath:com/blackleaf/webcrawler/config/spring/application-webcrawler-threadpool.xml" />
 </beans>
