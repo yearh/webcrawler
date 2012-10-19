@@ -5,6 +5,7 @@ import java.net.URL;
 
 public class LinkValidFilter implements LinkFilter {
 
+	@SuppressWarnings("unused")
 	public boolean doFilter(String url) {
 		if (!url.toLowerCase().startsWith("http://") && !url.toLowerCase().startsWith("https://"))
 			return false;
