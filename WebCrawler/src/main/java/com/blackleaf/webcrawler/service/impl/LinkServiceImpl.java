@@ -105,4 +105,8 @@ public class LinkServiceImpl implements LinkService {
 			linkDao.insertLinkRelations(relations);
 	}
 
+	public Link getFromLinkByToLinkId(long toLinkId) {
+		return linkDao.getFromLinkByToLinkId(toLinkId);
+	}
+
 }

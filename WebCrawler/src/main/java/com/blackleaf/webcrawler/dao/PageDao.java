@@ -8,4 +8,8 @@ public interface PageDao {
 	public long insertPage(Page page);
 
 	public long insertPages(List<Page> pages);
+
+	public List<Page> getPagesByType(int type, int maxSize);
+	
+	public Page getPageByLinkId(long linkId);
 }

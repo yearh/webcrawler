@@ -49,6 +49,10 @@ public class LinkDaoImpl extends SqlMapClientDaoSupport implements LinkDao {
 		return getSqlMapClientTemplate().update("updateLockFlags", param);
 	}
 
+	public Link getFromLinkByToLinkId(long toLinkId) {
+		return (Link) getSqlMapClientTemplate().queryForObject("getFromLinkByToLinkId", toLinkId);
+	}
+
 	public int updateLink(Link link) {
 		return getSqlMapClientTemplate().update("updateLink", link);
 	}

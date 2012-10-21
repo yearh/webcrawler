@@ -11,6 +11,8 @@ public class Page {
 	private String url;
 	private String content;
 	private Date createTime;
+	private int status;
+	private long linkId;
 
 	public long getId() {
 		return id;
@@ -50,6 +52,22 @@ public class Page {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public long getLinkId() {
+		return linkId;
+	}
+
+	public void setLinkId(long linkId) {
+		this.linkId = linkId;
 	}
 
 }

@@ -39,4 +39,6 @@ public interface LinkDao {
 	public int updateLink(Link link);
 
 	public Link getLinkByUrl(String url);
+	
+	public Link getFromLinkByToLinkId(long toLinkId);
 }

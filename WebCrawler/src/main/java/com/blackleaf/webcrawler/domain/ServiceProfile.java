@@ -3,11 +3,12 @@ package com.blackleaf.webcrawler.domain;
 public class ServiceProfile {
 	private int id;
 	private String name;
-	private String content;
+	private String description;
 	private float availability;
 	private float rating;
-	private int linkId;
-	private int profileLinkId;
+	private long linkId;
+	private long profileLinkId;
+	private String provider;
 
 	public int getId() {
 		return id;
@@ -25,12 +26,12 @@ public class ServiceProfile {
 		this.name = name;
 	}
 
-	public String getContent() {
-		return content;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public float getAvailability() {
@@ -49,20 +50,28 @@ public class ServiceProfile {
 		this.rating = rating;
 	}
 
-	public int getLinkId() {
+	public long getLinkId() {
 		return linkId;
 	}
 
-	public void setLinkId(int linkId) {
+	public void setLinkId(long linkId) {
 		this.linkId = linkId;
 	}
 
-	public int getProfileLinkId() {
+	public long getProfileLinkId() {
 		return profileLinkId;
 	}
 
-	public void setProfileLinkId(int profileLinkId) {
+	public void setProfileLinkId(long profileLinkId) {
 		this.profileLinkId = profileLinkId;
+	}
+
+	public String getProvider() {
+		return provider;
+	}
+
+	public void setProvider(String provider) {
+		this.provider = provider;
 	}
 
 }

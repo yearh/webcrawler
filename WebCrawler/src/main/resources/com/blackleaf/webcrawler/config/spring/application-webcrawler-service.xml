@@ -14,6 +14,12 @@
 	<bean id="pageService" class="com.blackleaf.webcrawler.service.impl.PageServiceImpl">
 		<property name="pageDao" ref="pageDao" />
 	</bean>
+	<bean id="wsdlService" class="com.blackleaf.webcrawler.service.impl.WsdlServiceImpl">
+		<property name="pageService" ref="pageService" />
+		<property name="linkService" ref="linkService" />
+		<property name="wsdlDao" ref="wsdlDao" />
+		<property name="sizePerTime" value="${wsdl_scan_size}" />
+	</bean>
 	
 	<!-- Processor collection -->
 	<bean id="preProcessor" class="com.blackleaf.webcrawler.processor.ExceptionalProcessor">

@@ -35,6 +35,7 @@ public class RetrievePageProcessor implements InvocationProcessor<CrawlerContext
 			try {
 				page.setContent(retrieveContents(currLink.getUrl()));
 				page.setUrl(currLink.getUrl());
+				page.setLinkId(currLink.getId());
 				pageBean.setPage(page);
 			} catch (IOException e) {
 				context.getErrorLinks().add(currLink);

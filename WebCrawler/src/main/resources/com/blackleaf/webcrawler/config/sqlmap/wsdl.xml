@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="WEBCRAWLER_LINK">
+	<typeAlias alias="ServiceProfile" type="com.blackleaf.webcrawler.domain.ServiceProfile" />
+	
+	<!-- insert -->
+	<insert id="insertWsdl" parameterClass="ServiceProfile">
+		insert into webservice_profile (name, description, availability, rating, link_id, descrpt_link_id, provider) values
+		(#name#, #description#, #availability#, #rating#, #linkId#, #profileLinkId#, #provider#)
+		<selectKey resultClass="long" keyProperty="id">
+			SELECT LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+	
+</sqlMap>

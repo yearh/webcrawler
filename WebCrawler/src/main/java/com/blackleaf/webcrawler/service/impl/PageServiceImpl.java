@@ -10,6 +10,14 @@ public class PageServiceImpl implements PageService {
 
 	private PageDao pageDao;
 
+	public PageDao getPageDao() {
+		return pageDao;
+	}
+
+	public void setPageDao(PageDao pageDao) {
+		this.pageDao = pageDao;
+	}
+
 	public long insertPage(Page page) {
 		return pageDao.insertPage(page);
 	}
@@ -17,13 +25,14 @@ public class PageServiceImpl implements PageService {
 	public long insertPages(List<Page> pages) {
 		return pageDao.insertPages(pages);
 	}
-	
-	public PageDao getPageDao() {
-		return pageDao;
+
+	public List<Page> getPagesByType(int type, int maxSize) {
+		return pageDao.getPagesByType(type, maxSize);
 	}
 
-	public void setPageDao(PageDao pageDao) {
-		this.pageDao = pageDao;
+	@Override
+	public Page getPageByLinkId(long linkId) {
+		return (Page) pageDao.getPageByLinkId(linkId);
 	}
 
 }

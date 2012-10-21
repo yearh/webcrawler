@@ -6,4 +6,5 @@
 		maxTransactions="16" useStatementNamespaces="false" />
 	<sqlMap resource="com/blackleaf/webcrawler/config/sqlmap/link.xml" />
 	<sqlMap resource="com/blackleaf/webcrawler/config/sqlmap/page.xml" />
+	<sqlMap resource="com/blackleaf/webcrawler/config/sqlmap/wsdl.xml" />
 </sqlMapConfig>

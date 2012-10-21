@@ -7,18 +7,32 @@
 		<property name="concurrent" value="true" />
 	</bean>
 
-	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+	<bean id="simpleCrawlTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 		<property name="jobDetail" ref="crawlJobDetail" />
-		<property name="startDelay" value="${start_delay}" />
-		<property name="repeatInterval" value="${repeat_interval}" />
+		<property name="startDelay" value="${crawl_start_delay}" />
+		<property name="repeatInterval" value="${crawl_repeat_interval}" />
+	</bean>
+	
+	<bean id="wsdlJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="crawlService" />
+		<property name="targetMethod" value="crawl" />
+		<property name="concurrent" value="true" />
+	</bean>
+
+	<bean id="simpleWsdlTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="crawlJobDetail" />
+		<property name="startDelay" value="${wsdl_start_delay}" />
+		<property name="repeatInterval" value="${wsdl_repeat_interval}" />
 	</bean>
 	
 	<bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 	    <property name="triggers">
 	        <list>
-	            <ref bean="simpleTrigger" />
+	            <ref bean="simpleCrawlTrigger" />
+	            <ref bean="simpleWsdlTrigger" />
 	        </list>
 	    </property>
+	    <property name="waitForJobsToCompleteOnShutdown" value="true" />
 	</bean>
   
 </beans>  

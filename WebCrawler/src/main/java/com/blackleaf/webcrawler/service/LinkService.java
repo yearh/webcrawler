@@ -29,4 +29,6 @@ public interface LinkService {
 	public void unlockLink(long linkId) throws CrawlerException;
 
 	public void unlockLinks(List<Long> linkIds) throws CrawlerException;
+	
+	public Link getFromLinkByToLinkId(long toLinkId);
 }

@@ -39,6 +39,9 @@
 	<select id="getLinkByUrl" parameterClass="string" resultClass="Link">
 		select * from link where url=#value#
 	</select>
+	<select id="getFromLinkByToLinkId" parameterClass="int" resultClass="Link">
+		select l.* from link_relation lr join link l on lr.from_link_id=l.id where lr.to_link_id=#value# limit 1
+	</select>
 	
 	<!-- update -->
 	<update id="updateLockFlag" parameterClass="java.util.Map">
